@@ -1,0 +1,38 @@
+---
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    hostname: ${GITLAB_HOST_IP}
+    container_name: gitlab
+
+    # Mounts secrets as files inside container at /run/secrets/
+    secrets:
+      - gitlab_root_password
+
+    ports:
+      - "${GITLAB_PORT}:80"
+      - "${GITLAB_SSH_PORT}:22"
+    
+    # Environment variables from .env file are passed to the container and read by gitlab-config.rb
+    env_file:
+      - .env
+    volumes:
+      # Mount our Ruby config (read-only to prevent accidental changes)
+      - './gitlab-config.rb:/etc/gitlab/gitlab.rb:ro'
+      # GitLab generated config and state
+      - './gitlab/config:/etc/gitlab:rw'
+      # GitLab data (repositories, uploads, etc.)
+      - './appdata/gitlab/data:/var/opt/gitlab:rw'
+      # GitLab Application logs
+      - './appdata/gitlab/log:/var/log/gitlab:rw'
+      # Backups (external storage for safety)
+      - '${BACKUP_PATH}:/var/opt/gitlab/backups:rw'
+
+    # Shared memory for PostgreSQL
+    shm_size: '256m'
+    restart: unless-stopped
+
+# Defines secret files to be mounted (contents never visible in docker inspect)
+secrets:
+  gitlab_root_password:
+    file: ./secrets/gitlab_root_password.txt
