@@ -57,7 +57,7 @@ This is the insecure method. Everything, including your password, lives in the `
 
 Your password moves to `./secrets/gitlab_root_password.txt`. Docker mounts it securely at `/run/secrets/` inside the container, where GitLab reads it using Ruby's `File.read()`. The password never appears in environment variables.
 
-Yes, the password is still stored in plain text, but this is not a [secrets and privileged access management](https://github.com/hashicorp/vault) post. 
+> The password is still stored in plain text on the host filesystem, be sure you've restrcted it accordingly.
 
 
 * * *
