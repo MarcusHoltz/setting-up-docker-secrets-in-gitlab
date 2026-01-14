@@ -35,7 +35,7 @@ This script is for a fresh Debian LXC to setup a new user, docker, some addition
 
 * * *
 
-## Three Examples
+## Each Folder Builds on Previous Example
 
 This repository contains three folders, each demonstrating a different approach. We will be going through each one, in order. Every folder will require edits to run.
 
