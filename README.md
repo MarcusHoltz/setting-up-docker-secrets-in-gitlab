@@ -6,7 +6,11 @@
 
 If you're running GitLab in Docker, you've probably stored your root password in an `.env` file. This works, but anyone inside the container or with Docker access can see your credentials in plain text.
 
-This guide was written to help you set up GitLab Omnibus with Docker Secrets stored **outside** of an `.env` file or in `Gitlab.rb`.
+This repository was made to help you set up GitLab Omnibus with Docker Secrets stored **outside** of an `.env` file or in `Gitlab.rb`.
+
+You can find the article that goes along with this repository at:
+
+[blog.holtzweb.com/posts/docker-secrets-with-gitlab-omnibus](https://blog.holtzweb.com/posts/docker-secrets-with-gitlab-omnibus)
 
 
 * * *
