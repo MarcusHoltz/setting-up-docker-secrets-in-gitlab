@@ -2,7 +2,7 @@
 
 Before we begin, you must have Docker and the compose plugin installed.
 
-I have included [0_create_user_install_docker.sh](#) to install Docker and setup a new user.
+I have included [0_create_user_install_docker.sh](https://github.com/MarcusHoltz/setting-up-docker-secrets-in-gitlab/blob/main/0-install-docker/0_create_user_install_docker.sh) to install Docker and setup a new user.
 
 * * *
 
