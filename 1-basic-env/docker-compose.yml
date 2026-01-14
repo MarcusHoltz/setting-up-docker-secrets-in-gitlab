@@ -1,0 +1,61 @@
+---
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    hostname: ${GITLAB_HOST_IP}
+    container_name: gitlab
+    env_file: .env
+    environment:
+      GITLAB_HOST_IP: ${GITLAB_HOST_IP}
+      GITLAB_PORT: ${GITLAB_PORT}
+      GITLAB_ROOT_PASSWORD: ${GITLAB_ROOT_PASSWORD}
+      BACKUP_PATH: ${BACKUP_PATH}
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://${GITLAB_HOST_IP}:${GITLAB_PORT}'
+
+        # 403 error fix for file uploads
+        gitlab_rails['monitoring_whitelist'] = ['127.0.0.0/8', '::1/128']
+        gitlab_rails['allowed_hosts'] = ['0.0.0.0', 'localhost', '127.0.0.1']
+        gitlab_rails['gitlab_shell_ssh_port'] = 22
+        gitlab_rails['backup_path'] = '/var/opt/gitlab/backups'
+        gitlab_rails['trusted_proxies'] = ['172.16.0.0/12', '192.168.0.0/16, '10.0.0.0/8']
+
+        # Puma web server tuning
+        puma['worker_processes'] = 1
+        puma['worker_timeout'] = 120
+        puma['listen'] = '0.0.0.0'
+        puma['port'] = 8080
+
+        # PostgreSQL tuning
+        postgresql['shared_buffers'] = '256MB'
+
+        # Sidekiq tuning
+        sidekiq['max_concurrency'] = 4
+        sidekiq['concurrency'] = 1
+
+        # Disable unnecessary services
+        prometheus_monitoring['enable'] = false
+        letsencrypt['enable'] = false
+        gitlab_pages['enable'] = false
+
+        # Nginx - HTTP only
+        nginx['enable'] = true
+        nginx['listen_https'] = false
+        nginx['redirect_http_to_https'] = false
+
+        # GitLab Workhorse
+        gitlab_workhorse['listen_network'] = 'tcp'
+        gitlab_workhorse['listen_addr'] = '0.0.0.0:8181'
+        gitlab_workhorse['auth_backend'] = 'http://localhost:8080'
+        gitlab_workhorse['api_limit_per_min'] = 0
+        gitlab_workhorse['api_queue_limit'] = 0
+        gitlab_workhorse['api_queue_duration'] = '30s'
+    ports:
+      - "${GITLAB_PORT}:80"
+      - "${GITLAB_SSH_PORT}:22"
+    volumes:
+      - './gitlab/config:/etc/gitlab:rw'
+      - './appdata/gitlab/data:/var/opt/gitlab:rw'
+      - './appdata/gitlab/log:/var/log/gitlab:rw'
+      - '${BACKUP_PATH}:/var/opt/gitlab/backups:rw'
+    shm_size: '256m'
