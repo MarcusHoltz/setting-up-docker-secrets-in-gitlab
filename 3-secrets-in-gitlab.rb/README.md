@@ -50,37 +50,20 @@ Now that we have a docker secret we dont see our secret inside the container and
 
 Let's take a look...
 
-
-
-
 ![Docker secrets loaded using our gitlab.rb](https://raw.githubusercontent.com/MarcusHoltz/marcusholtz.github.io/main/assets/img/posts/docker_secrets-3.png)
-
-
-
-
-
 
 Great job!!
 
 
-
+* * *
 
 ## Complete
 
-
 You made sure to keep a password out of your working enviornment. Well done.
-
 
 
 * * *
 
 ### Next Steps
 
-Once complete you can continue to the second half of this project, [GitLab Omnibus with Runner and TLS](#).
-
-
-
-
-
-
-
+Once complete you can continue to the second half of this project, [GitLab Omnibus with Runner and TLS](https://github.com/MarcusHoltz/docker-gitlab-runner).
